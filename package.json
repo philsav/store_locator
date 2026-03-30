@@ -1,0 +1,18 @@
+{
+  "name": "store-locator",
+  "version": "1.0.0",
+  "description": "Store locator with Leaflet.js, routing, and PostgreSQL",
+  "main": "src/api/server.js",
+  "scripts": {
+    "start": "node src/api/server.js",
+    "dev": "node --watch src/api/server.js",
+    "seed": "node src/db/seed.js",
+    "db:init": "node src/db/init.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "pg": "^8.11.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1"
+  }
+}

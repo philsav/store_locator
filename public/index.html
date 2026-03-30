@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Store Locator</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="container">
+    <aside class="sidebar">
+      <h1>Store Locator</h1>
+      
+      <div class="search-section">
+        <h2>Find Nearby Stores</h2>
+        <div class="search-controls">
+          <button id="findMeBtn" class="btn btn-secondary">
+            <span class="icon">📍</span> Use My Location
+          </button>
+          <div class="or-divider">or enter address</div>
+          <div class="search-row">
+            <div class="autocomplete-wrapper">
+              <input type="text" id="searchAddress" placeholder="Enter address or city" autocomplete="off" />
+              <div id="autocompleteResults" class="autocomplete-results"></div>
+            </div>
+            <button id="resetBtn" class="btn btn-icon" title="Reset">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+                <path d="M3 3v5h5"/>
+              </svg>
+            </button>
+          </div>
+          <button id="searchBtn" class="btn btn-primary">Search</button>
+        </div>
+        <div class="radius-control">
+          <label for="radius">Search radius:</label>
+          <select id="radius">
+            <option value="10000">10 km</option>
+            <option value="25000" selected>25 km</option>
+            <option value="50000">50 km</option>
+            <option value="100000">100 km</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="stores-list">
+        <h2>Stores</h2>
+        <div id="storesContainer" class="stores-container">
+          <p class="loading">Loading stores...</p>
+        </div>
+      </div>
+
+      <div id="directionsPanel" class="directions-panel hidden">
+        <h2>Directions</h2>
+        <div id="routeInfo" class="route-info"></div>
+        <div id="directionsList" class="directions-list"></div>
+        <button id="closeDirections" class="btn btn-secondary">Close</button>
+      </div>
+    </aside>
+
+    <main class="map-container">
+      <div id="map"></div>
+      <div class="map-controls">
+        <button id="clearRoute" class="btn btn-secondary hidden">Clear Route</button>
+        <button id="resetMapBtn" class="btn btn-icon-map" title="Reset map view">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+            <path d="M3 3v5h5"/>
+          </svg>
+        </button>
+      </div>
+    </main>
+  </div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
