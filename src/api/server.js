@@ -21,7 +21,7 @@ app.get('/api/debug', async (req, res) => {
       status: 'connected',
       storeCount: result.rows[0].count,
       postgisEnabled: extensions.rows.length > 0,
-      database: 'supabase'
+      database: 'neon'
     });
   } catch (err) {
     res.status(500).json({
