@@ -11,6 +11,13 @@ L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
   maxZoom: 19
 }).addTo(map)
 
+const storeClusters = L.markerClusterGroup({
+  maxClusterRadius: 50,
+  showCoverageOnHover: false,
+  disableClusteringAtZoom: 15,
+  animate: !window.matchMedia("(prefers-reduced-motion: reduce)").matches
+}).addTo(map)
+
 async function loadStores() {
   try {
     const response = await fetch("/api/stores")
@@ -43,23 +50,25 @@ function displayStores(stores) {
     )
     .join("")
 
-  container.addEventListener("click", e => {
+  container.onclick = e => {
     const item = e.target.closest(".store-item")
     if (item) {
       selectStore(parseInt(item.dataset.id))
     }
-  })
+  }
 }
 
 function addStoreMarkers(stores) {
-  Object.values(storeMarkers).forEach(marker => map.removeLayer(marker))
+  storeClusters.clearLayers()
   storeMarkers = {}
+  selectedStore = null
 
   stores.forEach(store => {
-    const marker = L.marker([store.lat, store.lng]).addTo(map).bindPopup(createPopupContent(store))
+    const marker = L.marker([store.lat, store.lng]).bindPopup(createPopupContent(store))
 
     storeMarkers[store.id] = marker
   })
+  storeClusters.addLayers(Object.values(storeMarkers))
 
   if (stores.length > 0 && !userMarker) {
     const bounds = L.latLngBounds(stores.map(s => [s.lat, s.lng]))
@@ -88,8 +97,10 @@ function selectStore(id) {
   selectedStore = storeMarkers[id]
   const marker = storeMarkers[id]
   if (marker) {
-    marker.openPopup()
-    map.setView(marker.getLatLng(), 14)
+    map.setView(marker.getLatLng(), Math.max(map.getZoom(), 15), { animate: false })
+    storeClusters.zoomToShowLayer(marker, () => {
+      if (selectedStore === marker && storeClusters.hasLayer(marker)) marker.openPopup()
+    })
   }
 }
 
@@ -360,7 +371,7 @@ function resetAll() {
     userMarker = null
   }
 
-  Object.values(storeMarkers).forEach(marker => map.removeLayer(marker))
+  storeClusters.clearLayers()
   storeMarkers = {}
 
   if (routingControl) {
